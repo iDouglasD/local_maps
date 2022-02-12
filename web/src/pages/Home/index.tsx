@@ -8,6 +8,7 @@ import {
     SubTitle,
     ButtonBox,
 } from "./styles";
+import { Link } from "react-router-dom";
 
 export default function Home() {
     return (
@@ -17,10 +18,12 @@ export default function Home() {
                 <SubTitle>
                     Encontre no comércio local tudo o que precisa!
                 </SubTitle>
-                <Button>
-                    <ButtonBox>{">"}</ButtonBox>
-                    Cadastre um ponto comercial
-                </Button>
+                <Link to="/new">
+                    <Button>
+                        <ButtonBox>{">"}</ButtonBox>
+                        Cadastre um ponto comercial
+                    </Button>
+                </Link>
             </LeftContainer>
             <RightContainer>
                 <Image />

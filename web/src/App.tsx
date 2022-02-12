@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import New from "./pages/New";
 
 function App() {
     const theme = {
@@ -15,7 +16,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/new" element={<p>Renderizando a new</p>} />
+                    <Route path="/new" element={<New />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
