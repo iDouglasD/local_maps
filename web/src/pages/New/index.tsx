@@ -16,8 +16,11 @@ import { LatLngExpression, LeafletMouseEvent } from "leaflet";
 import { TileLayer, Marker } from "react-leaflet";
 import { categories } from "./categories";
 import useGetLocation from "../../hooks/useGetLocation";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function New() {
+    const navigate = useNavigate();
     const [formValues, setFormValues] = useState({
         name: "",
         description: "",
@@ -27,12 +30,39 @@ export default function New() {
     });
     const { coords } = useGetLocation();
 
+    async function onSubmit() {
+        const request = await fetch("http://localhost:3001/store", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                ...formValues,
+                latitude: formValues.coords[0],
+                longitude: formValues.coords[1],
+            }),
+        });
+
+        if (request.ok) {
+            toast("Estabelecimento gravado com sucesso!", {
+                type: "success",
+                autoClose: 2000,
+                onClose: () => navigate("/"),
+            });
+        }
+    }
+
     if (!coords) {
         return <h1>Obtendo localização...</h1>;
     }
     return (
         <Container>
-            <Form>
+            <Form
+                onSubmit={(ev) => {
+                    ev.preventDefault();
+                    onSubmit();
+                }}
+            >
                 <FormTitle>Cadastro do comércio local</FormTitle>
                 <Section>Dados</Section>
                 <Input

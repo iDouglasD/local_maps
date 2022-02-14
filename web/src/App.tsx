@@ -3,6 +3,8 @@ import { ThemeProvider } from "styled-components";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import New from "./pages/New";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
     const theme = {
@@ -19,6 +21,7 @@ function App() {
                     <Route path="/new" element={<New />} />
                 </Routes>
             </BrowserRouter>
+            <ToastContainer />
         </ThemeProvider>
     );
 }
