@@ -15,6 +15,7 @@ import { useState } from "react";
 import { LatLngExpression, LeafletMouseEvent } from "leaflet";
 import { TileLayer, Marker } from "react-leaflet";
 import { categories } from "./categories";
+import useGetLocation from "../../hooks/useGetLocation";
 
 export default function New() {
     const [formValues, setFormValues] = useState({
@@ -22,9 +23,13 @@ export default function New() {
         description: "",
         contact: "",
         category: "",
+        coords: [0, 0],
     });
+    const { coords } = useGetLocation();
 
-    console.log(formValues);
+    if (!coords) {
+        return <h1>Obtendo localização...</h1>;
+    }
     return (
         <Container>
             <Form>
@@ -51,15 +56,37 @@ export default function New() {
 
                 <Section>Endereço</Section>
                 <MapContainer
-                    center={{ lat: 12, lng: 23 } as LatLngExpression}
+                    center={
+                        { lat: coords[0], lng: coords[1] } as LatLngExpression
+                    }
                     zoom={13}
-                    whenCreated={() => {}}
+                    whenCreated={(map) => {
+                        map.addEventListener(
+                            "click",
+                            (event: LeafletMouseEvent) => {
+                                setFormValues((prev) => ({
+                                    ...prev,
+                                    coords: [
+                                        event.latlng.lat,
+                                        event.latlng.lng,
+                                    ],
+                                }));
+                            }
+                        );
+                    }}
                 >
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[12, 23] as LatLngExpression} />
+                    <Marker
+                        position={
+                            [
+                                formValues.coords[0],
+                                formValues.coords[1],
+                            ] as LatLngExpression
+                        }
+                    />
                 </MapContainer>
                 <Section>Categorias</Section>
                 <CategoryContainer>
